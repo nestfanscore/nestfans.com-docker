@@ -33,7 +33,7 @@ services:
 
   app: &app_base
     container_name: 'homeland_app'
-    image: homeland/homeland:${IMAGE_VERSION:-latest}
+    image: nestfanscommunity/nestfans-homeland:${IMAGE_VERSION:-latest}
     env_file:
       - app.secret.env
       - app.local.env
