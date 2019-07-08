@@ -24,7 +24,7 @@ update:
 	@make secret
 	@touch app.local.env
 	@make restart
-	@docker tag homeland/homeland:latest homeland/homeland:$$(date "+%Y%m%d%H%M%S")
+	@docker tag nestfanscommunity/nestfans-homeland:latest nestfanscommunity/nestfans-homeland:$$(date "+%Y%m%d%H%M%S")
 restart:
 	@sh ./scripts/restart-app
 	@docker-compose stop web
