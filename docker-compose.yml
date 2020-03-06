@@ -2,25 +2,25 @@ version: "3"
 
 services:
   postgresql:
-    container_name: 'homeland_postgresql'
+    container_name: "homeland_postgresql"
     image: postgres:9.5-alpine
     ports:
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - ./data/postgresql:/var/lib/postgresql/data
 
   redis:
-    container_name: 'homeland_redis'
+    container_name: "homeland_redis"
     image: redis:3.2.7-alpine
     ports:
-      - '6379:6379'
+      - "6379:6379"
     volumes:
       - ./data/redis:/data
       - ./etc/redis.conf:/etc/redis.conf
     command: redis-server /etc/redis.conf --maxmemory 400mb
 
   elasticsearch:
-    container_name: 'homeland_elasticsearch'
+    container_name: "homeland_elasticsearch"
     image: elasticsearch:5-alpine
     environment:
       - bootstrap.memory_lock=true
@@ -28,11 +28,11 @@ services:
     volumes:
       - ./data/elasticsearch:/usr/share/elasticsearch/data
     ports:
-      - '9200'
-      - '9300'
+      - "9200"
+      - "9300"
 
   app: &app_base
-    container_name: 'homeland_app'
+    container_name: "homeland_app"
     image: nestfanscommunity/nestfans-homeland:${IMAGE_VERSION:-latest}
     env_file:
       - app.secret.env
@@ -59,23 +59,24 @@ services:
     command: /home/app/homeland/bin/docker-start
     ports:
       - "7000:7000"
+      - "465:465"
 
   app_backup:
     <<: *app_base
-    container_name: 'homeland_app_backup'
+    container_name: "homeland_app_backup"
     command: bundle exec puma -C config/puma-backup.rb
     ports:
       - "7001:7001"
 
   worker:
     <<: *app_base
-    container_name: 'homeland_worker'
+    container_name: "homeland_worker"
     ports: []
     command: bundle exec sidekiq -C config/sidekiq.yml -L /home/app/log/sidekiq.log
 
   web:
     <<: *app_base
-    container_name: 'homeland_web'
+    container_name: "homeland_web"
     links:
       - app
       - app_backup
